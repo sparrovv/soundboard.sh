@@ -2,17 +2,16 @@
 
 *soundboard.sh* is repository of funny clips, and simple bash script to play them form terminal.
 
-Curently it works on osx.
+Currently it works on osx.
 
 ## TODO:
 * Make it work on linux
 
 ## Where to use it?
-* sett in cron
-  * when leaving work
-  * lunch time
+* with cron
+  * leaving work alarm
+  * lunch time alarm
 
 * CI build fails / back to normal
+* tests passes / fails
 * add sounds to cap deploy
-* tests passes
-* impress coleagues, there is always a good sound that can describe situation
