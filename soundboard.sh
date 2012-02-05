@@ -1,7 +1,10 @@
 #! /bin/bash
 
-export SOUNDBOARD_DIR=`dirname "$0"`
+#export SOUNDBOARD_DIR=`dirname "$0"`
+export SOUNDBOARD_DIR='/Users/michalwrobel/workspace/soundboard'
 export SOUNDBOARD_MUSIC_DIR="$SOUNDBOARD_DIR/files"
+
+SHELL_NAME=$(basename $SHELL)
 
 usage() {
   echo "soundboard.sh"
@@ -56,6 +59,42 @@ then
   action=$1
 fi
 
+autocompletion()
+{
+  if [[ $SHELL_NAME == 'bash']]; then
+    cat <<EOS
+    _soundboard_autocompl() {
+      local cur=\${COMP_WORDS[COMP_CWORD]}
+
+      if [[ "\$COMP_CWORD" == 1 ]]; then
+        local names="play ls stop help"
+        COMPREPLY=( \$(compgen -W "\$names" -- \$cur) )
+      elif [[ "\$COMP_CWORD" == 2 && "\${COMP_WORDS[1]}" == "play" ]]; then
+        local names=\$(ls $SOUNDBOARD_MUSIC_DIR)
+        COMPREPLY=( \$(compgen -W "\$names" -- \$cur) )
+      fi
+    }
+    complete -F _soundboard_autocompl $(basename $0)
+EOS
+
+  elif [[ $SHELL_NAME == "zsh" ]]; then
+    cat <<EOS
+    _soundbard_autocompl() {
+      local word words
+      read -cA words
+      word="\${words[2]}"
+
+      if [ "\${#words}" -eq 2 ]; then
+        reply=(ls play stop help)
+      elif [ "\${#words}" -eq 3 ] && [ "\$word" = "play" ]; then
+        reply=(\`ls $SOUNDBOARD_MUSIC_DIR\`)
+      fi
+    }
+    compctl -K _soundbard_autocompl $(basename $0)
+EOS
+  fi
+}
+
 case $action in
   "ls")
     list
@@ -63,6 +102,9 @@ case $action in
   "play")
     file=$2
     play "$file"
+    ;;
+  "autocompletion")
+    autocompletion
     ;;
   "stop")
     stopPlay
