@@ -61,7 +61,7 @@ fi
 
 autocompletion()
 {
-  if [[ $SHELL_NAME == 'bash']]; then
+  if [[ $SHELL_NAME == 'bash' ]]; then
     cat <<EOS
     _soundboard_autocompl() {
       local cur=\${COMP_WORDS[COMP_CWORD]}
@@ -92,6 +92,7 @@ EOS
     }
     compctl -K _soundbard_autocompl $(basename $0)
 EOS
+
   fi
 }
 
